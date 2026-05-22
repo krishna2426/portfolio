@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krishna Sharma — Terminal Portfolio</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230d1117'/><text x='3' y='22' font-family='monospace' font-size='15' font-weight='bold' fill='%2339d353'>KS</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --border: #30363d;
+    --green: #39d353;
+    --green2: #26a641;
+    --cyan: #58d6f0;
+    --yellow: #e3b341;
+    --orange: #f0883e;
+    --red: #ff7b72;
+    --pink: #ff79c6;
+    --purple: #bd93f9;
+    --gray: #8b949e;
+    --text: #e6edf3;
+    --text2: #c9d1d9;
+    --cursor: #39d353;
+    --font: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ── WINDOW CHROME ── */
+  .window {
+    max-width: 900px;
+    margin: 30px auto;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+  }
+
+  .titlebar {
+    background: var(--bg3);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .dots { display: flex; gap: 8px; }
+  .dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+  }
+  .dot.r { background: #ff5f57; }
+  .dot.y { background: #febc2e; }
+  .dot.g { background: #28c840; }
+
+  .title-text {
+    flex: 1;
+    text-align: center;
+    font-size: 12px;
+    color: var(--gray);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── TERMINAL BODY ── */
+  .terminal {
+    background: var(--bg);
+    padding: 24px 28px 32px;
+    min-height: 500px;
+  }
+
+  /* ── SECTIONS ── */
+  .section { margin-bottom: 2rem; }
+
+  .prompt {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .p-user { color: var(--green); font-weight: 500; }
+  .p-at { color: var(--gray); }
+  .p-host { color: var(--cyan); font-weight: 500; }
+  .p-sep { color: var(--gray); margin: 0 2px; }
+  .p-path { color: var(--purple); }
+  .p-git { color: var(--yellow); font-size: 12px; }
+  .p-dollar { color: var(--gray); margin: 0 6px 0 4px; }
+  .p-cmd { color: var(--text); }
+
+  .output { padding-left: 0; }
+
+  /* ASCII ART */
+  .ascii {
+    color: var(--green);
+    font-size: 11px;
+    line-height: 1.3;
+    white-space: pre;
+    margin-bottom: 16px;
+    font-weight: 300;
+  }
+
+  /* INFO CARD */
+  .info-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2px 16px;
+    margin-bottom: 12px;
+  }
+  .info-key { color: var(--cyan); }
+  .info-val { color: var(--text2); }
+  .info-val a { color: var(--green); text-decoration: none; }
+  .info-val a:hover { text-decoration: underline; }
+
+  /* SKILLS */
+  .skills-list { padding-left: 0; }
+  .skill-row { margin-bottom: 6px; }
+  .skill-label { color: var(--yellow); display: inline-block; min-width: 120px; }
+  .skill-bar { display: inline-flex; gap: 3px; vertical-align: middle; }
+  .skill-tag {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--cyan);
+    font-size: 11px;
+    padding: 1px 8px;
+    border-radius: 3px;
+    margin: 2px 3px 2px 0;
+    display: inline-block;
+  }
+
+  /* PROJECTS */
+  .project {
+    border-left: 2px solid var(--green2);
+    padding-left: 14px;
+    margin-bottom: 16px;
+  }
+  .project-name { color: var(--orange); font-weight: 500; }
+  .project-tech { color: var(--purple); font-size: 12px; margin-left: 8px; }
+  .project-award { color: var(--yellow); font-size: 12px; }
+  .project-desc { color: var(--text2); margin-top: 4px; font-size: 13px; }
+  .bullet { color: var(--gray); margin-right: 6px; }
+
+  /* RESEARCH */
+  .research {
+    border-left: 2px solid var(--cyan);
+    padding-left: 14px;
+    margin-bottom: 16px;
+  }
+  .research-title { color: var(--cyan); font-weight: 500; }
+  .research-date { color: var(--gray); font-size: 12px; margin-left: 8px; }
+  .research-desc { color: var(--text2); margin-top: 4px; font-size: 13px; }
+
+  /* CERTS */
+  .cert-row { display: grid; grid-template-columns: 16px 1fr auto; align-items: baseline; gap: 0 8px; margin-bottom: 8px; }
+  .cert-icon { color: var(--yellow); }
+  .cert-main { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 6px; }
+  .cert-name { color: var(--text2); }
+  .cert-org { color: var(--gray); font-size: 12px; }
+  .cert-year { color: var(--green); font-size: 12px; text-align: right; white-space: nowrap; }
+
+  /* HELP TABLE */
+  .help-grid {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 4px 16px;
+  }
+  .help-cmd { color: var(--green); }
+  .help-desc { color: var(--gray); }
+
+  /* DIVIDER */
+  .divider { color: var(--border); margin: 4px 0 12px; }
+
+  /* INTERACTIVE INPUT */
+  .input-row {
+    display: flex;
+    align-items: center;
+    margin-top: 24px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+  .input-prompt { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  #cmd-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 14px;
+    caret-color: var(--cursor);
+    margin-left: 0;
+  }
+
+  /* CURSOR BLINK */
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+  .cursor { display: inline-block; width: 8px; height: 14px; background: var(--cursor); vertical-align: middle; animation: blink 1.1s step-end infinite; margin: 0 2px; }
+  .input-row.typing .cursor { display: none; }
+
+  /* SCROLL */
+  .output-area { max-height: 72vh; overflow-y: auto; scroll-behavior: smooth; }
+  .output-area::-webkit-scrollbar { width: 6px; }
+  .output-area::-webkit-scrollbar-track { background: var(--bg); }
+  .output-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* TYPED TEXT ANIMATION */
+  .typed { overflow: hidden; }
+
+  /* HELP highlight */
+  .hl-green { color: var(--green); }
+  .hl-red { color: var(--red); }
+  .hl-yellow { color: var(--yellow); }
+  .hl-cyan { color: var(--cyan); }
+  .hl-purple { color: var(--purple); }
+  .hl-gray { color: var(--gray); }
+  .hl-orange { color: var(--orange); }
+
+  /* STAT PILLS */
+  .stat-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .stat-pill {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+  }
+  .stat-pill .num { color: var(--green); font-weight: 500; }
+  .stat-pill .lbl { color: var(--gray); }
+
+  /* SECTION HEADER */
+  .sec-header {
+    color: var(--gray);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sec-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* HIDDEN SECTIONS */
+  .section.hidden { display: none; }
+
+  @media (max-width: 620px) {
+    .window { margin: 0; border-radius: 0; }
+    .terminal { padding: 16px; }
+    .ascii { font-size: 7px; }
+    .info-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="window">
+  <div class="titlebar">
+    <div class="dots">
+      <div class="dot r"></div>
+      <div class="dot y"></div>
+      <div class="dot g"></div>
+    </div>
+    <div class="title-text">krishna@portfolio — zsh — 80×24</div>
+  </div>
+
+  <div class="terminal">
+    <div class="output-area" id="output-area">
+
+      <!-- BOOT SEQUENCE -->
+      <div class="section" id="sec-boot">
+        <div class="ascii">
+ ██╗  ██╗██████╗ ██╗███████╗██╗  ██╗███╗   ██╗ █████╗ 
+ ██║ ██╔╝██╔══██╗██║██╔════╝██║  ██║████╗  ██║██╔══██╗
+ █████╔╝ ██████╔╝██║███████╗███████║██╔██╗ ██║███████║
+ ██╔═██╗ ██╔══██╗██║╚════██║██╔══██║██║╚██╗██║██╔══██║
+ ██║  ██╗██║  ██║██║███████║██║  ██║██║ ╚████║██║  ██║
+ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝</div>
+        <div style="color:var(--gray); font-size:12px; margin-bottom:16px;">
+          <span class="hl-green">●</span> Portfolio OS v2026.5 — loaded in <span class="hl-yellow">0.42s</span><br>
+          <span class="hl-gray">Type</span> <span class="hl-green">help</span> <span class="hl-gray">to see available commands, or explore below.</span>
+        </div>
+      </div>
+
+      <!-- WHOAMI -->
+      <div class="section" id="sec-whoami">
+        <div class="prompt">
+          <span class="p-user">krishna</span><span class="p-at">@</span><span class="p-host">portfolio</span>
+          <span class="p-sep">:</span><span class="p-path">~</span>
+          <span class="p-git">(main ✔)</span>
+          <span class="p-dollar">$</span>
+          <span class="p-cmd">whoami</span>
+        </div>
+        <div class="output">
+          <div class="sec-header">identity</div>
+          <div class="info-grid">
+            <span class="info-key">name</span>      <span class="info-val">Krishna Sharma</span>
+            <span class="info-key">role</span>      <span class="info-val">CS Student · ML Researcher · Builder</span>
+            <span class="info-key">location</span>  <span class="info-val">Jharkhand, India</span>
+            <span class="info-key">college</span>   <span class="info-val">K.K. College of Engineering &amp; Management (KKCEM)</span>
+            <span class="info-key">degree</span>    <span class="info-val">B.Tech Computer Science <span class="hl-gray">| 2023 – 2027</span></span>
+            <span class="info-key">gpa</span>       <span class="info-val"><span class="hl-green">7.5</span><span class="hl-gray">/10</span></span>
+            <span class="info-key">email</span>     <span class="info-val"><a href="mailto:krishnakr3009@gmail.com">krishnakr3009@gmail.com</a></span>
+            <span class="info-key">github</span>    <span class="info-val"><a href="https://github.com/krishna2426" target="_blank">github.com/krishna2426</a></span>
+            <span class="info-key">linkedin</span>  <span class="info-val"><a href="https://linkedin.com/in/krishna-sharma-112366215" target="_blank">linkedin.com/in/krishna-sharma-112366215</a></span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-pill"><span class="num">150+</span> <span class="lbl">GitHub contributions</span></span>
+            <span class="stat-pill"><span class="num">16+</span> <span class="lbl">public repos</span></span>
+            <span class="stat-pill"><span class="num">3</span> <span class="lbl">hackathons</span></span>
+            <span class="stat-pill"><span class="num">2</span> <span class="lbl">research tracks</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SKILLS -->
+      <div class="section" id="sec-skills">
+        <div class="prompt">
+          <span class="p-user">krishna</span><span class="p-at">@</span><span class="p-host">portfolio</span>
+          <span class="p-sep">:</span><span class="p-path">~</span>
+          <span class="p-dollar">$</span>
+          <span class="p-cmd">cat skills.json</span>
+        </div>
+        <div class="output">
+          <div class="sec-header">technical skills</div>
+
+          <div class="skill-row">
+            <span class="skill-label">languages</span>
+            <span class="skill-tag">Python</span><span class="skill-tag">TypeScript</span><span class="skill-tag">JavaScript</span><span class="skill-tag">Java</span><span class="skill-tag">C</span><span class="skill-tag">C++</span><span class="skill-tag">HTML</span><span class="skill-tag">CSS</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-label">ml &amp; data</span>
+            <span class="skill-tag">TensorFlow</span><span class="skill-tag">Scikit-learn</span><span class="skill-tag">Keras</span><span class="skill-tag">XGBoost</span><span class="skill-tag">Pandas</span><span class="skill-tag">NumPy</span><span class="skill-tag">Matplotlib</span><span class="skill-tag">Seaborn</span><span class="skill-tag">NLTK</span><span class="skill-tag">spaCy</span><span class="skill-tag">OpenCV</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-label">web</span>
+            <span class="skill-tag">React.js</span><span class="skill-tag">Next.js</span><span class="skill-tag">Node.js</span><span class="skill-tag">Tailwind CSS</span><span class="skill-tag">REST APIs</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-label">tools</span>
+            <span class="skill-tag">Git</span><span class="skill-tag">GitHub</span><span class="skill-tag">AWS</span><span class="skill-tag">Firebase</span><span class="skill-tag">Vercel</span><span class="skill-tag">Google Colab</span><span class="skill-tag">Jupyter</span><span class="skill-tag">Prompt Engineering</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROJECTS -->
+      <div class="section" id="sec-projects">
+        <div class="prompt">
+          <span class="p-user">krishna</span><span class="p-at">@</span><span class="p-host">portfolio</span>
+          <span class="p-sep">:</span><span class="p-path">~/projects</span>
+          <span class="p-dollar">$</span>
+          <span class="p-cmd">tree .</span>
+        </div>
+        <div class="output">
+          <div class="sec-header">projects</div>
+
+          <div class="project">
+            <div>
+              <span class="project-name">ThalaConnect</span>
+              <span class="project-tech">TypeScript · AI · Mobile-First</span>
+              <span class="project-award" style="float:right">🏆 AI-For-Good Hackathon 2025</span>
+            </div>
+            <div class="project-desc">
+              <span class="bullet">›</span>AI-powered blood donation platform connecting Thalassemia patients with donors across India.<br>
+              <span class="bullet">›</span>Intelligent donor matching, patient education modules, community support system.<br>
+              <span class="bullet">›</span>Mobile-first accessible interface for users requiring frequent blood transfusions.
+            </div>
+          </div>
+
+          <div class="project">
+            <div>
+              <span class="project-name">EnergyWise</span>
+              <span class="project-tech">TypeScript · Accessibility · Frontend</span>
+              <span class="project-award" style="float:right">🏆 SUSTAINOVATION 2025</span>
+            </div>
+            <div class="project-desc">
+              <span class="bullet">›</span>Accessibility-first energy dashboard for elderly users — large-text UI, simplified navigation, voice assistance.<br>
+              <span class="bullet">›</span>Presented at SUSTAINOVATION 2025; positive judge feedback on accessibility-first design.
+            </div>
+          </div>
+
+          <div class="project">
+            <div>
+              <span class="project-name">EDA Portfolio</span>
+              <span class="project-tech">Python · Pandas · Seaborn · Jupyter</span>
+              <span class="hl-gray" style="font-size:12px; float:right">2024</span>
+            </div>
+            <div class="project-desc">
+              <span class="bullet">›</span>Analyzed multiple real-world datasets using statistical techniques, data cleaning, and visualization.<br>
+              <span class="bullet">›</span>Extracted patterns and insights from raw data across diverse domains.
+            </div>
+          </div>
+
+          <!-- SIDEQUESTS sub-tree -->
+          <div style="margin-top:18px;">
+            <div style="color:var(--gray);font-size:12px;margin-bottom:8px;">
+              <span style="color:var(--border)">├──</span>
+              <span style="color:var(--purple);font-weight:500;"> sidequests/</span>
+              <span style="color:var(--gray);font-size:11px;"> — built for the joy of it</span>
+            </div>
+
+            <!-- sketchify -->
+            <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;gap:0 8px;padding:4px 0 4px 20px;border-left:1px solid var(--border);margin-left:8px;">
+              <span style="color:var(--border);font-size:12px;white-space:nowrap;">├──</span>
+              <span style="font-size:13px;">
+                <span style="color:var(--purple);font-weight:500;">Sketchify</span>
+                <span style="color:var(--gray);font-size:11px;margin-left:6px;">TypeScript · Gemini API · Vite</span>
+                <span style="color:var(--text2);font-size:12px;display:block;padding-left:0;margin-top:2px;">AI sketching app — draw or upload, Gemini interprets &amp; enhances in real time. <a href="https://sketchify-eta.vercel.app/" target="_blank" style="color:var(--cyan);text-decoration:none;">↗ live</a></span>
+              </span>
+              <a href="https://github.com/krishna2426/sketchify" target="_blank" style="color:var(--gray);font-size:11px;text-decoration:none;white-space:nowrap;">⎇ github</a>
+            </div>
+
+            <!-- fireworks -->
+            <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;gap:0 8px;padding:4px 0 4px 20px;border-left:1px solid var(--border);margin-left:8px;">
+              <span style="color:var(--border);font-size:12px;white-space:nowrap;">├──</span>
+              <span style="font-size:13px;">
+                <span style="color:var(--purple);font-weight:500;">Fireworks</span>
+                <span style="color:var(--gray);font-size:11px;margin-left:6px;">HTML5 Canvas · Vanilla JS · OOP</span>
+                <span style="color:var(--text2);font-size:12px;display:block;margin-top:2px;">Particle physics sim — gravity, friction, heart/star/circle explosions, zero dependencies.</span>
+              </span>
+              <a href="https://github.com/krishna2426/fireworks" target="_blank" style="color:var(--gray);font-size:11px;text-decoration:none;white-space:nowrap;">⎇ github</a>
+            </div>
+
+            <!-- hyperaze -->
+            <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;gap:0 8px;padding:4px 0 4px 20px;border-left:1px solid var(--border);margin-left:8px;">
+              <span style="color:var(--border);font-size:12px;white-space:nowrap;">├──</span>
+              <span style="font-size:13px;">
+                <span style="color:var(--purple);font-weight:500;">Hyperaze Landing Page</span>
+                <span style="color:var(--gray);font-size:11px;margin-left:6px;">HTML · CSS</span>
+                <span style="color:var(--text2);font-size:12px;display:block;margin-top:2px;">Minimal product landing page, built in public on X (<span style="color:var(--gray)">@__krishna_24</span>). Pure vanilla. <a href="https://krishna2426.github.io/hyperaze-landing-page/" target="_blank" style="color:var(--cyan);text-decoration:none;">↗ live</a></span>
+              </span>
+              <a href="https://github.com/krishna2426/hyperaze-landing-page" target="_blank" style="color:var(--gray);font-size:11px;text-decoration:none;white-space:nowrap;">⎇ github</a>
+            </div>
+
+            <!-- micrograd -->
+            <div style="display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;gap:0 8px;padding:4px 0 4px 20px;border-left:1px solid var(--border);margin-left:8px;">
+              <span style="color:var(--border);font-size:12px;white-space:nowrap;">└──</span>
+              <span style="font-size:13px;">
+                <span style="color:var(--purple);font-weight:500;">Micrograd</span>
+                <span style="color:var(--gray);font-size:11px;margin-left:6px;">Python · Jupyter · Backprop from scratch</span>
+                <span style="color:var(--text2);font-size:12px;display:block;margin-top:2px;">Learning journal — implementing autograd &amp; backprop from scratch, Karpathy-style. <span style="color:var(--yellow)">WIP</span></span>
+              </span>
+              <a href="https://github.com/krishna2426/micrograd" target="_blank" style="color:var(--gray);font-size:11px;text-decoration:none;white-space:nowrap;">⎇ github</a>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- RESEARCH -->
+
+      <div class="section" id="sec-research">
+        <div class="prompt">
+          <span class="p-user">krishna</span><span class="p-at">@</span><span class="p-host">portfolio</span>
+          <span class="p-sep">:</span><span class="p-path">~/research</span>
+          <span class="p-dollar">$</span>
+          <span class="p-cmd">cat README.md</span>
+        </div>
+        <div class="output">
+          <div class="sec-header">research interests</div>
+
+          <div class="research">
+            <div>
+              <span class="research-title">Cross-Lingual Consistency in LLMs</span>
+              <span class="research-date">2025 – Present</span>
+            </div>
+            <div class="research-desc">
+              <span class="bullet">›</span>Investigating whether LLMs produce semantically equivalent responses to identical prompts across English, Hindi, and Bengali.<br>
+              <span class="bullet">›</span>Designing controlled prompt sets spanning factual, reasoning, and opinion-eliciting question types.<br>
+              <span class="bullet">›</span>Conducting experiments in Jupyter/Colab; documenting divergence patterns.<br>
+              <span class="bullet">›</span>Reviewing literature on multilingual LLM evaluation and cross-lingual transfer.<br>
+              <span class="hl-yellow">›</span> <span class="hl-yellow">Public repository &amp; write-up in preparation.</span>
+            </div>
+          </div>
+
+          <div class="research">
+            <div>
+              <span class="research-title">Applied ML for Domain-Specific Insight Generation</span>
+              <span class="research-date">2025 – Present</span>
+            </div>
+            <div class="research-desc">
+              <span class="bullet">›</span>Exploring how healthcare, education &amp; finance data can be modeled to surface actionable insights for non-technical stakeholders.<br>
+              <span class="bullet">›</span>Reviewing literature on feature engineering and model interpretability — SHAP, LIME.<br>
+              <span class="bullet">›</span>Motivated by the gap between raw domain data and accessible decision support.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CERTS -->
+      <div class="section" id="sec-certs">
+        <div class="prompt">
+          <span class="p-user">krishna</span><span class="p-at">@</span><span class="p-host">portfolio</span>
+          <span class="p-sep">:</span><span class="p-path">~/certs</span>
+          <span class="p-dollar">$</span>
+          <span class="p-cmd">ls *.cert</span>
+        </div>
+        <div class="output">
+          <div class="sec-header">certifications &amp; achievements</div>
+
+          <div class="cert-row">
+            <span class="cert-icon">◈</span>
+            <span class="cert-main"><span class="cert-name">SPARC-HDCI 2026</span><span class="cert-org">— Certificate of Presentation, IIT Kharagpur (MoE SPARC Program)</span></span>
+            <span class="cert-year">May 2026</span>
+          </div>
+          <div class="cert-row">
+            <span class="cert-icon">◈</span>
+            <span class="cert-main"><span class="cert-name">AWS Educate ML Foundations</span><span class="cert-org">— Amazon Web Services</span></span>
+            <span class="cert-year">2025</span>
+          </div>
+          <div class="cert-row">
+            <span class="cert-icon">◈</span>
+            <span class="cert-main"><span class="cert-name">Software Engineer Certificate</span><span class="cert-org">— HackerRank</span></span>
+            <span class="cert-year">2025</span>
+          </div>
+          <div class="cert-row">
+            <span class="cert-icon">◈</span>
+            <span class="cert-main"><span class="cert-name">Google Analytics Certification</span><span class="cert-org">— Google Digital Academy (Skillshop)</span></span>
+            <span class="cert-year">2025</span>
+          </div>
+
+          <div style="margin-top:14px; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg2);">
+            <span class="hl-green">git log --oneline --since="1 year ago" | wc -l</span><br>
+            <span style="color:var(--text2);">→ <span class="hl-green" style="font-size:18px; font-weight:600;">150+</span> contributions across <span class="hl-cyan">16+</span> public repositories</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- HELP -->
+      <div class="section" id="sec-help" style="display:none">
+        <div class="output">
+          <div class="sec-header">available commands</div>
+          <div class="help-grid">
+            <span class="help-cmd">whoami</span>        <span class="help-desc">Personal info &amp; contact details</span>
+            <span class="help-cmd">skills</span>        <span class="help-desc">Technical skills &amp; languages</span>
+            <span class="help-cmd">projects</span>      <span class="help-desc">Hackathon &amp; personal projects</span>
+            <span class="help-cmd">sidequests</span>    <span class="help-desc">Fun builds — canvas, AI, vanilla JS</span>
+            <span class="help-cmd">research</span>      <span class="help-desc">Active research interests</span>
+            <span class="help-cmd">certs</span>         <span class="help-desc">Certifications &amp; achievements</span>
+            <span class="help-cmd">binary</span>        <span class="help-desc">See Krishna's binary portrait</span>
+            <span class="help-cmd">cv</span>            <span class="help-desc">Download general CV (software / jobs)</span>
+            <span class="help-cmd">cv --research</span> <span class="help-desc">Download research-focused CV</span>
+            <span class="help-cmd">binary --me</span>   <span class="help-desc">Upload your photo → get binary art + download</span>
+            <span class="help-cmd">clear</span>         <span class="help-desc">Clear terminal (reload)</span>
+            <span class="help-cmd">help</span>          <span class="help-desc">Show this menu</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DYNAMIC OUTPUT ZONE -->
+      <div id="dynamic-output"></div>
+
+    </div>
+
+    <!-- INPUT -->
+    <div class="input-row">
+      <div class="input-prompt">
+        <span class="p-user">krishna</span><span class="p-at">@</span><span class="p-host">portfolio</span>
+        <span class="p-sep">:</span><span class="p-path">~</span>
+        <span class="p-dollar">$</span>
+        <span class="cursor"></span>
+      </div>
+      <input type="text" id="cmd-input" autocomplete="off" spellcheck="false" placeholder="" autofocus />
+    </div>
+  </div>
+</div>
+
+<script>
+const input = document.getElementById('cmd-input');
+const dynOut = document.getElementById('dynamic-output');
+const outputArea = document.getElementById('output-area');
+const inputRow = input.closest('.input-row');
+
+input.addEventListener('focus', () => inputRow.classList.add('typing'));
+input.addEventListener('blur', () => { if (!input.value) inputRow.classList.remove('typing'); });
+input.addEventListener('input', () => {
+  if (input.value) inputRow.classList.add('typing');
+  else inputRow.classList.remove('typing');
+});
+
+  const CV_NSQ_URL = "https://drive.google.com/file/d/1_RRlEVti4dnXtQWU_n6K3rFeF2Bl_2My/view?usp=sharing";
+  const CV_RSQ_URL = "https://drive.google.com/file/d/1VazeO7oFk2nWvbFktHdwh3W1S4tM1SYp/view?usp=sharing";
+
+
+
+  const BINARY_ART = ["000000000000000000000000000000000000000000000000000000000000000000000000","000000000000000000000000000000000000000000000000000000000000000000000000","000000000000000000000000000000000000000000000000000000000000000000000000","000000000000000000000000000000000000000000000000000000000000000000000000","000000000000000000000000000000000000010000000000000000000000000000000000","000000000000000000000000000111111111111111110000000000000000000000000000","000000000000000000000000111111111111111111111100000000000000000000000000","000000000000000000000111111111111111111111111111100000000000000000000000","000000000000000000011111111111111111111111111111111000000000000000000000","000000000000000000111111111111111110101111011111111110000000000000000000","000000000000000001111110111111111100000110001111111111000000000000000000","000000000000000001111100011100000000101110000111111111100000000000000000","000000000000000001111110000000000011111111000000111111110000000000000000","000000000000000000111110000000000111101111100000011111110000000000000000","000000000000000000111100000000001110000011110000001111100000000000000000","000000000000000000011000000000011100000001110000000111000000000000000000","000000000000000000000000011111111100000011111000000010000000000000000000","000000000000000000000000111111111110000111111110000000000000000000000000","000000000000000000100001111111111110001111111111000110000000000000000000","000000000000000001110000111111111100000111111110001111000000000000000000","000000000000000011110000000000000000000001110000000111100000000000000000","000000000000000001110000000000000000000000100000000111100000000000000000","000000000000000001110000000000000000001001110000000111000000000000000000","000000000000000000100000000010010001111111111000000010000000000000000000","000000000000000000001010000111111011111111111111101000000000000000000000","000000000000000000011111000111110001111011111111111100000000000000000000","000000000000000000001111100011000000110000111111111000000000000000000000","000000000000000000000111110100000001110000011111111000000000000000000000","000000000000000000000011111110000000100000001111110000000000000000000000","000000000000000000000001111111000000000000011111100000000000000000000000","000000000000000000000000111111111100100011111111000000000000000000000000","000000000000000000000000111111111111111111111110000000000000000000000000","000000000000000000000001110011111111111111111100000000000000000000000000","000000000000000000000011100000001111111111111100010000000000000000000000","000000000000000000000111000000000001111111111000111000000000000000000000","000000000000000000000010000010000000111111110000010000000000000000000000","000000000000000000000000000111100001111111100000000000000000001100000000","000000000001000000000000000011110111111111000000000000000000011110000000","000000000111100000000000000001111111101111100000000000000000111100000000","000001111111000000000000000011100111000111110010000000000000011000000000","000011111110000000000000000111000010000011100111000000000000000000000000","000001111100000000000000000010000000000001000010000000000000000000000000","000000000000000000000000000000000000000000000000000000000000000000000000"];
+
+function renderBinaryArt() {
+  const c0 = '<span style="color:var(--bg3)">0</span>';
+  const c1 = '<span style="color:var(--green)">1</span>';
+  const lines = BINARY_ART.map(row =>
+    row.split('').map(ch => ch === '1' ? c1 : c0).join('')
+  ).join('<br>');
+  const html = `<div style="font-size:9.5px;line-height:1.22;font-family:var(--font);letter-spacing:0.02em;margin:4px 0 8px;overflow-x:auto">${lines}</div>
+<div style="color:var(--gray);font-size:12px;margin-top:6px;"><span style="color:var(--green)">// </span>Krishna Sharma — binary portrait · <span style="color:var(--cyan)">cat photo.bin | xxd -b</span></div>`;
+  appendLine(html);
+}
+
+function launchBinaryLab() {
+  const id = 'blab-' + Date.now();
+  const html = `
+<div id="${id}" style="border:1px solid var(--border);border-radius:8px;padding:18px 20px;margin-top:8px;background:var(--bg2);">
+  <div style="color:var(--cyan);font-size:13px;margin-bottom:14px;letter-spacing:0.05em;">
+    <span style="color:var(--green)">$</span> binary --interactive <span style="color:var(--gray)">// drop your photo, get binary art</span>
+  </div>
+
+  <!-- Upload zone -->
+  <div id="${id}-drop" style="border:1.5px dashed var(--border);border-radius:6px;padding:28px 16px;text-align:center;cursor:pointer;transition:border-color 0.2s;margin-bottom:14px;">
+    <div style="color:var(--gray);font-size:13px;line-height:1.9;">
+      <span style="color:var(--green);font-size:18px;">⬆</span><br>
+      drag &amp; drop image here<br>
+      <span style="font-size:11px;">or <span style="color:var(--cyan);text-decoration:underline;cursor:pointer;" id="${id}-browse">click to browse</span> — jpg, png, webp</span>
+    </div>
+    <input type="file" id="${id}-file" accept="image/*" style="display:none">
+  </div>
+
+  <!-- Controls (hidden until image loaded) -->
+  <div id="${id}-controls" style="display:none;margin-bottom:12px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+      <div>
+        <div style="color:var(--gray);font-size:11px;margin-bottom:4px;">sensitivity <span id="${id}-thresh-val" style="color:var(--yellow)">10</span></div>
+        <input type="range" id="${id}-thresh" min="2" max="30" value="10" style="width:100%">
+      </div>
+      <div>
+        <div style="color:var(--gray);font-size:11px;margin-bottom:4px;">resolution <span id="${id}-res-val" style="color:var(--yellow)">72</span></div>
+        <input type="range" id="${id}-res" min="40" max="110" value="72" style="width:100%">
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <button id="${id}-invert" style="background:var(--bg3);border:1px solid var(--border);color:var(--text2);font-family:var(--font);font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer;">invert</button>
+      <button id="${id}-regen" style="background:var(--bg3);border:1px solid var(--border);color:var(--cyan);font-family:var(--font);font-size:11px;padding:4px 12px;border-radius:4px;cursor:pointer;">↺ regenerate</button>
+      <button id="${id}-dl" style="background:var(--green2);border:1px solid var(--green);color:#000;font-family:var(--font);font-size:11px;padding:4px 14px;border-radius:4px;cursor:pointer;font-weight:600;">↓ download .png</button>
+      <span style="color:var(--gray);font-size:11px;margin-left:auto;" id="${id}-dims"></span>
+    </div>
+  </div>
+
+  <!-- Output -->
+  <div id="${id}-output" style="font-size:9px;line-height:1.18;font-family:var(--font);letter-spacing:0.01em;overflow-x:auto;min-height:20px;"></div>
+  <canvas id="${id}-canvas" style="display:none"></canvas>
+</div>`;
+
+  appendLine(html);
+  outputArea.scrollTop = outputArea.scrollHeight;
+
+  // ── State ──
+  let imgData = null;
+  let inverted = false;
+
+  const drop    = document.getElementById(`${id}-drop`);
+  const fileIn  = document.getElementById(`${id}-file`);
+  const browse  = document.getElementById(`${id}-browse`);
+  const controls= document.getElementById(`${id}-controls`);
+  const thSlider= document.getElementById(`${id}-thresh`);
+  const thVal   = document.getElementById(`${id}-thresh-val`);
+  const resSlider=document.getElementById(`${id}-res`);
+  const resVal  = document.getElementById(`${id}-res-val`);
+  const invertBtn=document.getElementById(`${id}-invert`);
+  const regenBtn= document.getElementById(`${id}-regen`);
+  const dlBtn   = document.getElementById(`${id}-dl`);
+  const outDiv  = document.getElementById(`${id}-output`);
+  const canvas  = document.getElementById(`${id}-canvas`);
+  const dimsSpan= document.getElementById(`${id}-dims`);
+
+  // drag & drop
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.style.borderColor = 'var(--green)'; });
+  drop.addEventListener('dragleave', () => { drop.style.borderColor = 'var(--border)'; });
+  drop.addEventListener('drop', e => {
+    e.preventDefault(); drop.style.borderColor = 'var(--border)';
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) loadImage(file);
+  });
+  drop.addEventListener('click', () => fileIn.click());
+  browse.addEventListener('click', e => { e.stopPropagation(); fileIn.click(); });
+  fileIn.addEventListener('change', () => { if (fileIn.files[0]) loadImage(fileIn.files[0]); });
+
+  // controls
+  thSlider.addEventListener('input', () => { thVal.textContent = thSlider.value; if (imgData) render(); });
+  resSlider.addEventListener('input', () => { resVal.textContent = resSlider.value; if (imgData) render(); });
+  invertBtn.addEventListener('click', () => { inverted = !inverted; invertBtn.style.color = inverted ? 'var(--green)' : 'var(--text2)'; if (imgData) render(); });
+  regenBtn.addEventListener('click', () => { if (imgData) render(); });
+  dlBtn.addEventListener('click', download);
+
+  function loadImage(file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => { imgData = img; controls.style.display = 'block'; drop.style.display = 'none'; render(); };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function render() {
+    if (!imgData) return;
+    const W = parseInt(resSlider.value);
+    const aspectCorrection = 0.5;
+    const H = Math.round((imgData.height / imgData.width) * W * aspectCorrection);
+    dimsSpan.textContent = W + '×' + H;
+
+    // Draw to offscreen canvas
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(imgData, 0, 0, W, H);
+    const px = ctx.getImageData(0, 0, W, H).data;
+
+    // Convert to grayscale array
+    const gray = new Float32Array(W * H);
+    for (let i = 0; i < W * H; i++) {
+      gray[i] = 0.299 * px[i*4] + 0.587 * px[i*4+1] + 0.114 * px[i*4+2];
+    }
+
+    // Local adaptive threshold (box blur approximation)
+    const margin = parseInt(thSlider.value);
+    const radius = 4;
+    const localMean = boxBlur(gray, W, H, radius);
+
+    const binary = new Uint8Array(W * H);
+    for (let i = 0; i < W * H; i++) {
+      let dark = gray[i] < localMean[i] - margin;
+      binary[i] = inverted ? (dark ? 0 : 1) : (dark ? 1 : 0);
+    }
+
+    // Render HTML
+    const c0 = '<span style="color:#21262d">0</span>';
+    const c1 = '<span style="color:#39d353">1</span>';
+    let html = '';
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        html += binary[y * W + x] ? c1 : c0;
+      }
+      html += '<br>';
+    }
+    outDiv.innerHTML = html;
+
+    // Also render to canvas for download (scaled up)
+    renderToCanvas(binary, W, H);
+  }
+
+  function boxBlur(src, w, h, r) {
+    const dst = new Float32Array(w * h);
+    // horizontal pass
+    const tmp = new Float32Array(w * h);
+    for (let y = 0; y < h; y++) {
+      let sum = 0, count = 0;
+      for (let x = 0; x < w; x++) {
+        sum += src[y * w + x]; count++;
+        if (x > r) { sum -= src[y * w + x - r - 1]; count--; }
+        tmp[y * w + x] = sum / count;
+      }
+    }
+    // vertical pass
+    for (let x = 0; x < w; x++) {
+      let sum = 0, count = 0;
+      for (let y = 0; y < h; y++) {
+        sum += tmp[y * w + x]; count++;
+        if (y > r) { sum -= tmp[(y - r - 1) * w + x]; count--; }
+        dst[y * w + x] = sum / count;
+      }
+    }
+    return dst;
+  }
+
+  function renderToCanvas(binary, W, H) {
+    const scale = 10;
+    canvas.width = W * scale; canvas.height = H * scale;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#0d1117';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = `${scale - 1}px "JetBrains Mono", monospace`;
+    ctx.textBaseline = 'top';
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < W; x++) {
+        ctx.fillStyle = binary[y * W + x] ? '#39d353' : '#21262d';
+        ctx.fillText(binary[y * W + x] ? '1' : '0', x * scale, y * scale);
+      }
+    }
+  }
+
+  function download() {
+    const link = document.createElement('a');
+    link.download = 'binary-portrait.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+}
+
+const commands = {
+  whoami: () => scrollTo('sec-whoami'),
+  skills: () => scrollTo('sec-skills'),
+  projects: () => scrollTo('sec-projects'),
+  sidequests: () => scrollTo('sec-sidequests'),
+  research: () => scrollTo('sec-research'),
+  certs: () => scrollTo('sec-certs'),
+  help: () => { document.getElementById('sec-help').style.display = 'block'; scrollTo('sec-help'); },
+  binary: () => renderBinaryArt(),
+  'cv': () => {
+    window.open(CV_NSQ_URL, '_blank');
+    appendLine('<span style="color:var(--green)">↗ opening</span> <span style="color:var(--text2)">Krishna_Sharma_CV.pdf</span> <span style="color:var(--gray)">— general / software roles</span><br><span style="color:var(--gray);font-size:12px;">→ <a href="' + CV_NSQ_URL + '" target="_blank" style="color:var(--cyan)">drive.google.com/…/Krishna_Sharma_CV</a></span>');
+  },
+  'cv --research': () => {
+    window.open(CV_RSQ_URL, '_blank');
+    appendLine('<span style="color:var(--green)">↗ opening</span> <span style="color:var(--text2)">Krishna_Sharma_Research_CV.pdf</span> <span style="color:var(--gray)">— research focused</span><br><span style="color:var(--gray);font-size:12px;">→ <a href="' + CV_RSQ_URL + '" target="_blank" style="color:var(--cyan)">drive.google.com/…/Krishna_Sharma_Research_CV</a></span>');
+  },
+  'binary --me': () => launchBinaryLab(),
+  'binary --interactive': () => launchBinaryLab(),
+  clear: () => location.reload(),
+  pwd: () => appendLine('<span style="color:var(--green)">/home/krishna/portfolio</span>'),
+  ls: () => appendLine('<span style="color:var(--cyan)">whoami.txt  skills.json  projects/  sidequests/  research/  certs/  photo.bin</span>'),
+  date: () => appendLine('<span style="color:var(--text2)">' + new Date().toUTCString() + '</span>'),
+  uname: () => appendLine('<span style="color:var(--gray)">Portfolio OS 2026 x86_64 — Krishna Sharma</span>'),
+  'cat about.txt': () => appendLine('<span style="color:var(--text2)">CS student at KKCEM, Jharkhand. Building at the intersection of ML, accessibility, and real-world impact. Currently researching cross-lingual consistency in LLMs. Open to research collaborations &amp; internships.</span>'),
+};
+
+function scrollTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function appendLine(html) {
+  const div = document.createElement('div');
+  div.className = 'section';
+  div.innerHTML = `<div class="output" style="margin-top:6px">${html}</div>`;
+  dynOut.appendChild(div);
+  outputArea.scrollTop = outputArea.scrollHeight;
+}
+
+function echoCmd(cmd) {
+  const div = document.createElement('div');
+  div.innerHTML = `<div class="prompt" style="margin-top:12px">
+    <span class="p-user">krishna</span><span class="p-at">@</span><span class="p-host">portfolio</span>
+    <span class="p-sep">:</span><span class="p-path">~</span>
+    <span class="p-dollar">$</span>
+    <span class="p-cmd">${cmd}</span>
+  </div>`;
+  dynOut.appendChild(div);
+}
+
+input.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter') return;
+  const cmd = input.value.trim().toLowerCase();
+  input.value = '';
+  if (!cmd) return;
+
+  echoCmd(cmd);
+
+  if (commands[cmd]) {
+    commands[cmd]();
+  } else if (cmd === 'sudo rm -rf /') {
+    appendLine('<span style="color:var(--red)">Permission denied. Nice try.</span>');
+  } else if (cmd.startsWith('echo ')) {
+    appendLine(`<span style="color:var(--text2)">${cmd.slice(5)}</span>`);
+  } else if (cmd === 'github') {
+    appendLine('<span style="color:var(--cyan)">Opening → <a href="https://github.com/krishna2426" target="_blank">github.com/krishna2426</a></span>');
+  } else if (cmd === 'linkedin') {
+    appendLine('<span style="color:var(--cyan)">Opening → <a href="https://linkedin.com/in/krishna-sharma-112366215" target="_blank">linkedin.com/in/krishna-sharma</a></span>');
+  } else {
+    appendLine(`<span style="color:var(--red)">command not found:</span> <span style="color:var(--text2)">${cmd}</span> — type <span style="color:var(--green)">help</span> for available commands`);
+  }
+});
+</script>
+
+</body>
+</html>
